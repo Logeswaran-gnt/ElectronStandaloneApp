@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+	function readTextFile(file, callback) {
+	var rawFile = new XMLHttpRequest();
+	rawFile.overrideMimeType("application/json");
+	rawFile.open("GET", file, true);
+	rawFile.onreadystatechange = function() {
+	if (rawFile.readyState === 4 && rawFile.status == "200") {
+	callback(rawFile.responseText);
+	}
+	}
+	rawFile.send(null);
+	}
+	//usage:
+	readTextFile("scoreCard.json", function(text){
+	var playerInfo = JSON.parse(text);
+	var arrValues = [['Month', 'Sales Figure']];
+
+	Object.keys(playerInfo["SRH"]).forEach(function(key) {
+	arrValues.push([key, playerInfo['SRH'][key]]);
+	});
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+
+	var data = google.visualization.arrayToDataTable(arrValues);
+
+	var options = {
+	title: 'SRH'
+	};
+
+	var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+	chart.draw(data, options);
+	}  });
+
+
+	$(document).ready(function() {
+	$('#example').DataTable();
+	} );
+	</script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row" style="background-color:#d9e6f2;">
+			<div class="col-md-12" style="text-align:center; color:#7442f4">
+			<h2 style="color:blue;"><span><img src="ipl.png" style="height:80;width=150;"></span>IPL-2018 Final Score Card</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div id="piechart" class="col-md-6" style="width: 900px; height: 500px;">
+			</div>
+		</div>
+	</div>
+   
+</body>
+</html>
